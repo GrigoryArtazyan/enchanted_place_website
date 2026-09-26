@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book — Enchanted Place</title>
+<meta name="description" content="Book a family, team, or community forest bathing session in Metro Vancouver.">
+<link rel="icon" href="design_assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital@0;1&family=IM+Fell+English:ital@0;1&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="book">
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+  <a class="logo" href="home.html">enchanted.place</a>
+  <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
+  <nav class="nav" id="menu" aria-label="Main">
+    <a href="home.html">Home</a>
+    <a href="index.html">Experiences</a>
+    <a href="about.html">About</a>
+    <a href="book.html" aria-current="page">Book</a>
+  </nav>
+</header>
+<main id="main" class="page page-book">
+  <div class="page-intro">
+    <p class="kicker">Book</p>
+    <h1>Choose a session.</h1>
+    <p class="lede">Pick your people, then a date. About two hours on Metro Vancouver trails.</p>
+  </div>
+  <p class="book-strip">Stanley Park, Pacific Spirit, Maple Ridge · under 2&nbsp;km · we walk in rain</p>
+  <div class="book-choices">
+    <button class="choice" type="button" data-book="family" style="--i:0">
+      <span class="choice-inner">
+        <span class="choice-shot">
+          <img src="design_assets/session-forest.jpg" alt="" style="object-position: 72% 68%">
+        </span>
+        <span class="choice-copy">
+          <span class="choice-kicker">Family · 3–5 · private</span>
+          <strong>A slow afternoon, together.</strong>
+          <span class="choice-price"><em>$65</em> CAD per person · 2 hours</span>
+        </span>
+      </span>
+    </button>
+    <button class="choice" type="button" data-book="team" style="--i:1">
+      <span class="choice-inner">
+        <span class="choice-shot">
+          <img src="design_assets/session-forest.jpg" alt="" style="object-position: 40% 40%">
+        </span>
+        <span class="choice-copy">
+          <span class="choice-kicker">Team · 15–20</span>
+          <strong>Step out of the meeting.</strong>
+          <span class="choice-price"><em>$40</em> CAD per person · 2 hours</span>
+        </span>
+      </span>
+    </button>
+    <button class="choice" type="button" data-book="community" style="--i:2">
+      <span class="choice-inner">
+        <span class="choice-shot">
+          <img src="design_assets/session-forest.jpg" alt="" style="object-position: 18% 55%">
+        </span>
+        <span class="choice-copy">
+          <span class="choice-kicker">Community · 15–20</span>
+          <strong>Care for those who care.</strong>
+          <span class="choice-price"><em>$20</em> CAD per person · 2 hours</span>
+        </span>
+      </span>
+    </button>
+  </div>
+  <p class="after-cards">Looking for 1:1? <a href="about.html#one">Inquire about a private session.</a></p>
+</main>
+<footer class="site-footer">
+  <div class="footer-grid">
+    <form class="letter" id="letter" data-letter>
+      <h2>A letter from the forest, once a month.</h2>
+      <p>One small practice for the month, what’s in season on the trail, and new sessions before they’re public.</p>
+      <div class="letter-row">
+        <label class="sr-only" for="letter-email">Email address</label>
+        <input id="letter-email" name="email" type="email" placeholder="Your email" autocomplete="email" required>
+        <button class="btn" type="submit">Subscribe</button>
+      </div>
+      <p class="hint" data-letter-note>Once a month. Unsubscribe anytime.</p>
+    </form>
+    <ul class="footer-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="index.html">Experiences</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="book.html" aria-current="page">Book</a></li>
+      <li><a href="about.html#guide">Become a Guide</a></li>
+      <li><a href="about.html#host">Host an experience</a></li>
+      <li><a href="https://instagram.com/enchanted.place.inc" rel="noopener">Instagram @enchanted.place.inc</a></li>
+    </ul>
+  </div>
+  <p class="ack">We practice on the unceded territories of the xʷməθkʷəy̓əm, Sḵwx̱wú7mesh, and səl̓ilwətaʔɬ Nations. <a href="about.html#acknowledgment">Read the full acknowledgment</a></p>
+  <p class="copy">© 2026 Enchanted Place Inc. · Enchanted Place · Re-generating harmony and compassion in human–planet co-existence.</p>
+</footer>
+<script src="site.js"></script>
+</body>
+</html>

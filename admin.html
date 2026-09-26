@@ -1,0 +1,238 @@
+<!doctype html>
+<!-- Password-protected inbox: letter emails + form messages from data/messages.json -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin — Enchanted Place</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="design_assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital@0;1&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #141311;
+    --paper: #f4f0e8;
+    --line: color-mix(in srgb, var(--ink) 16%, transparent);
+    --muted: color-mix(in srgb, var(--ink) 62%, transparent);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Source Sans 3", system-ui, sans-serif;
+  }
+  .wrap { width: min(920px, calc(100% - 2rem)); margin: 0 auto; padding: 2.5rem 0 4rem; }
+  h1 { font-family: "EB Garamond", Georgia, serif; font-weight: 400; font-size: clamp(2rem, 4vw, 2.75rem); margin: 0 0 .35rem; }
+  .lede { color: var(--muted); margin: 0 0 1.5rem; }
+  .panel {
+    border: 1px solid var(--line);
+    background: #fff;
+    padding: 1.25rem;
+  }
+  label { display: block; font-size: .9rem; margin-bottom: .4rem; }
+  input[type="password"] {
+    width: 100%;
+    min-height: 46px;
+    border: 1px solid var(--line);
+    padding: 0 12px;
+    font: inherit;
+    background: var(--paper);
+  }
+  .row { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: .9rem; }
+  button {
+    border: 0;
+    min-height: 46px;
+    padding: 0 1.1rem;
+    background: var(--ink);
+    color: var(--paper);
+    font: inherit;
+    cursor: pointer;
+  }
+  button.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .err { color: #8a2a1a; margin: .75rem 0 0; min-height: 1.25em; }
+  .tabs { display: flex; gap: .5rem; margin: 0 0 1rem; flex-wrap: wrap; }
+  .tabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .tabs button[aria-pressed="false"] { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .meta { color: var(--muted); font-size: .92rem; margin: 0 0 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  th, td { text-align: left; vertical-align: top; padding: .7rem .55rem; border-bottom: 1px solid var(--line); }
+  th { font-weight: 600; color: var(--muted); font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+  .kind { font-weight: 600; }
+  .empty { color: var(--muted); padding: 1rem 0; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Admin</h1>
+    <p class="lede">Letter list and form messages from the site.</p>
+
+    <section id="login" class="panel" hidden>
+      <form id="login-form">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <div class="row">
+          <button type="submit">Sign in</button>
+        </div>
+        <p class="err" id="login-err" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="inbox" hidden>
+      <div class="row" style="justify-content: space-between; margin-bottom: 1rem;">
+        <div class="tabs" role="tablist" aria-label="Message kind">
+          <button type="button" id="tab-letters" aria-pressed="true">Letters</button>
+          <button type="button" id="tab-all" aria-pressed="false">All messages</button>
+        </div>
+        <button type="button" class="ghost" id="logout">Sign out</button>
+      </div>
+      <p class="meta" id="counts"></p>
+      <div class="panel">
+        <div id="list"></div>
+      </div>
+      <p class="err" id="inbox-err" aria-live="polite"></p>
+    </section>
+  </main>
+
+<script>
+const loginEl = document.getElementById('login');
+const inboxEl = document.getElementById('inbox');
+const listEl = document.getElementById('list');
+const countsEl = document.getElementById('counts');
+const loginErr = document.getElementById('login-err');
+const inboxErr = document.getElementById('inbox-err');
+const tabLetters = document.getElementById('tab-letters');
+const tabAll = document.getElementById('tab-all');
+
+let payload = null;
+let view = 'letters';
+
+document.getElementById('login-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  loginErr.textContent = '';
+  const password = document.getElementById('password').value;
+  try {
+    const res = await fetch('/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      loginErr.textContent = data.error || 'Could not sign in.';
+      return;
+    }
+    document.getElementById('password').value = '';
+    await loadInbox();
+  } catch {
+    loginErr.textContent = 'Could not reach the server.';
+  }
+});
+
+document.getElementById('logout').addEventListener('click', async () => {
+  await fetch('/api/admin/logout', { method: 'POST' });
+  payload = null;
+  showLogin();
+});
+
+tabLetters.addEventListener('click', () => {
+  view = 'letters';
+  tabLetters.setAttribute('aria-pressed', 'true');
+  tabAll.setAttribute('aria-pressed', 'false');
+  render();
+});
+
+tabAll.addEventListener('click', () => {
+  view = 'all';
+  tabLetters.setAttribute('aria-pressed', 'false');
+  tabAll.setAttribute('aria-pressed', 'true');
+  render();
+});
+
+function showLogin() {
+  loginEl.hidden = false;
+  inboxEl.hidden = true;
+}
+
+function showInbox() {
+  loginEl.hidden = true;
+  inboxEl.hidden = false;
+}
+
+async function loadInbox() {
+  inboxErr.textContent = '';
+  const res = await fetch('/api/admin/messages');
+  if (res.status === 401 || res.status === 503) {
+    showLogin();
+    if (res.status === 503) {
+      const data = await res.json().catch(() => ({}));
+      loginErr.textContent = data.error || 'Admin is not configured.';
+    }
+    return;
+  }
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data) {
+    showLogin();
+    loginErr.textContent = 'Could not load messages.';
+    return;
+  }
+  payload = data;
+  showInbox();
+  render();
+}
+
+function render() {
+  if (!payload) return;
+  const rows = view === 'letters' ? payload.letters : payload.messages;
+  countsEl.textContent = `${payload.counts.letters} letter${payload.counts.letters === 1 ? '' : 's'} · ${payload.counts.all} total`;
+  if (!rows.length) {
+    listEl.innerHTML = '<p class="empty">Nothing here yet.</p>';
+    return;
+  }
+  const body = rows.map((row) => {
+    const when = formatWhen(row.at);
+    const detail = view === 'letters'
+      ? escapeHtml(row.email || '')
+      : escapeHtml(summarize(row));
+    return `<tr>
+      <td class="kind">${escapeHtml(row.kind || '')}</td>
+      <td>${when}</td>
+      <td>${detail}</td>
+    </tr>`;
+  }).join('');
+  listEl.innerHTML = `<table>
+    <thead><tr><th>Kind</th><th>When</th><th>${view === 'letters' ? 'Email' : 'Detail'}</th></tr></thead>
+    <tbody>${body}</tbody>
+  </table>`;
+}
+
+function summarize(row) {
+  if (row.kind === 'letter') return row.email || '';
+  const bits = [row.name, row.email, row.experience, row.date, row.size && `size ${row.size}`, row.rate && `$${row.rate}`, row.note, row.practice, row.languages, row.place, row.who]
+    .filter(Boolean);
+  return bits.join(' · ');
+}
+
+function formatWhen(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return escapeHtml(iso);
+  return escapeHtml(d.toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }));
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
+}
+
+loadInbox().catch(() => showLogin());
+</script>
+</body>
+</html>

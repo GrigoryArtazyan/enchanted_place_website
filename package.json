@@ -1,0 +1,13 @@
+{
+  "name": "enchanted-place",
+  "private": true,
+  "type": "module",
+  "description": "Enchanted Place — forest bathing site with Stripe booking and letter inbox",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "stripe": "^22.6.2"
+  }
+}

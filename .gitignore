@@ -1,0 +1,14 @@
+# Secrets and local runtime
+.env
+node_modules/
+
+# Inbox / orders written by the server (may contain personal data)
+data/*.json
+!data/.gitkeep
+
+# Local-only design sources (HEIC, screenshots, zips, unused drafts)
+design_assets/_raw/
+*.zip
+*.HEIC
+.DS_Store
+.cursor/

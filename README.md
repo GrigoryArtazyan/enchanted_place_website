@@ -1,29 +1,72 @@
-# enchanted_place_website
+# Enchanted Place
 
-Reusable single-page site frame: sticky nav, hero, split section with cards, case study with animated stats, three-column process, team grid, story split, and contact form (FormSubmit).
+Forest bathing site for Metro Vancouver: experiences, about, booking (Stripe Checkout), and a monthly letter signup.
 
-Static HTML — no build step.
+Static HTML/CSS/JS served by a small Express app on port 4242.
+
+## Pages
+
+| URL | File | Role |
+|-----|------|------|
+| `/home.html` | `home.html` | Home — belonging card |
+| `/` or `/index.html` | `index.html` | Experiences (family / team / community) |
+| `/about.html` | `about.html` | Story, land acknowledgement, guide & host forms |
+| `/book.html` | `book.html` | Start a booking |
+| `/admin` | `admin.html` | Password-protected inbox (letters + messages) |
+
+`experiences.html` redirects to `index.html`.
 
 ## Run locally
 
-Open `index.html` in a browser, or:
-
 ```bash
-npx serve .
+cp .env.example .env
+# Add Stripe keys and ADMIN_PASSWORD
+npm install
+npm start
 ```
 
-## Customize
+Open http://localhost:4242 — use `/home.html` for the home card, `/` for Experiences.
 
-1. **Copy & text** — Edit section comments in `index.html` (`NAV`, `HERO`, etc.).
-2. **Images** — Add an `images/` folder; swap `.img-placeholder` divs for `<img src="images/…">` tags.
-3. **Colors** — Palette lives in compiled Tailwind utilities in `styles.css` (`navy-900`, `rust-600`, `cream-50`, …). Regenerate from source Tailwind config if you maintain one, or find-replace hex values in `styles.css`.
-4. **Contact form** — Set `hello@example.com` in the form `action`, hidden `_next` URL, and `DEST_EMAIL` in the script. First live submission triggers a one-time FormSubmit confirmation email.
-5. **Deploy** — Add `CNAME` for a custom domain (GitHub Pages), or use default `*.github.io` hosting.
+Forward Stripe webhooks (optional, for paid fulfillments):
+
+```bash
+stripe listen --forward-to localhost:4242/api/webhook
+```
+
+## Environment
+
+See `.env.example`. Important:
+
+- `STRIPE_*` — Checkout and webhooks
+- `ADMIN_PASSWORD` — unlocks `/admin`
+- Letter emails and form submissions append to `data/messages.json` (gitignored; created at runtime)
+
+## Design assets
+
+Production images live in `design_assets/` with clear names:
+
+| File | Use |
+|------|-----|
+| `favicon.png` | Site icon |
+| `home-card.png` | Home page mark |
+| `session-forest.jpg` | Experience & book cards |
+| `about-hero.jpg` | About hero photo |
+| `leaf.png` | Small leaf graphic |
+
+Drafts, HEICs, screenshots, and unused video stay in `design_assets/_raw/` (gitignored).
 
 ## Structure
 
 ```
-index.html      # page sections + inline JS (menu, stats, form)
-styles.css      # Tailwind build + small custom rules
-images/         # (you add) photos, logo, og-image.jpg
+about.html book.html home.html index.html admin.html
+styles.css          # site styles
+site.js             # nav, letter forms, booking sheet
+server.js           # Express + Stripe + messages + admin
+data/               # messages.json / orders.json at runtime
+design_assets/      # web images
+.env.example
 ```
+
+## Deploy notes
+
+Set the same env vars on the host. Ensure `data/` is writable so letter signups persist. Do not commit `.env` or `data/*.json`.
