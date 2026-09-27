@@ -41,7 +41,7 @@
         </ul>
         <div class="tail">
           <p class="note" aria-hidden="true">&nbsp;</p>
-          <button class="btn" type="button" data-book="family">Book a family session</button>
+          <button class="btn" type="button" data-open-host="family">Book a family session</button>
       </div>
     </div>
     </article>
@@ -60,8 +60,8 @@
           <li><strong>2 hours</strong><span>duration</span></li>
           </ul>
         <div class="tail">
-          <p class="note">Larger team? <a href="about.html#host">Tell us</a>.</p>
-          <button class="btn" type="button" data-book="team">Book a team session</button>
+          <p class="note">Larger team? <a href="#host" data-open-host>Tell us</a>.</p>
+          <button class="btn" type="button" data-open-host="team">Book a team session</button>
         </div>
       </div>
     </article>
@@ -81,12 +81,55 @@
         </ul>
         <div class="tail">
           <p class="note" aria-hidden="true">&nbsp;</p>
-          <button class="btn" type="button" data-book="community">Book a community session</button>
+          <button class="btn" type="button" data-open-host="community">Book a community session</button>
       </div>
     </div>
     </article>
 </div>
-  <p class="after-cards">A session for one? <a href="about.html#one">Inquire about 1:1</a></p>
+  <p class="after-cards">A larger group or a custom session? <a href="#host" data-open-host>Tell us who it’s for</a>. A session for one? <a href="about.html#one">Inquire about 1:1</a></p>
+  <div class="host-pop" id="host" hidden>
+    <div class="host-pop__scrim" data-host-close></div>
+    <div class="host-pop__panel" role="dialog" aria-modal="true" aria-labelledby="host-title">
+      <button class="host-pop__close" type="button" data-host-close aria-label="Close">×</button>
+    <form class="panel" data-message="host">
+      <p class="kicker" id="host-kicker"></p>
+      <h2 id="host-title">Tell us who it’s for.</h2>
+      <p class="hint">Five questions. We’ll come back with a proposal shaped around your people.</p>
+      <input id="host-experience" name="experience" type="hidden" value="">
+      <div class="field">
+        <label for="host-name">Name and organization</label>
+        <input id="host-name" name="name" autocomplete="organization" required>
+      </div>
+      <div class="field">
+        <label for="host-email">Email</label>
+        <input id="host-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+      </div>
+      <div class="field">
+        <label for="host-who">Who the session is for</label>
+        <select id="host-who" name="who">
+          <option>Guests</option>
+          <option>Staff</option>
+          <option>Residents</option>
+          <option>Students</option>
+          <option>Community members</option>
+          <option>Something else</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="host-size">Approximate group size and timing</label>
+        <input id="host-size" name="size" placeholder="e.g. 20 people, spring" required>
+      </div>
+      <div class="field">
+        <label for="host-note">Anything we should know</label>
+        <textarea id="host-note" name="note"></textarea>
+      </div>
+      <div class="form-foot">
+        <button class="btn" type="submit">Send</button>
+        <p>We read every message ourselves and reply within 2 working days.</p>
+      </div>
+    </form>
+    </div>
+  </div>
 </main>
 <footer class="site-footer">
   <div class="footer-grid">
@@ -106,7 +149,7 @@
       <li><a href="about.html">About</a></li>
       <li><a href="book.html">Book</a></li>
       <li><a href="about.html#guide">Become a Guide</a></li>
-      <li><a href="about.html#host">Host an experience</a></li>
+      <li><a href="#host" data-open-host>Host an experience</a></li>
         <li><a href="https://instagram.com/enchanted.place.inc" rel="noopener">Instagram @enchanted.place.inc</a></li>
       </ul>
     </div>

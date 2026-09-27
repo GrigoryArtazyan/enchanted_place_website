@@ -85,8 +85,11 @@
     <section id="inbox" hidden>
       <div class="row" style="justify-content: space-between; margin-bottom: 1rem;">
         <div class="tabs" role="tablist" aria-label="Message kind">
-          <button type="button" id="tab-letters" aria-pressed="true">Letters</button>
-          <button type="button" id="tab-all" aria-pressed="false">All messages</button>
+          <button type="button" data-view="letters" aria-pressed="true">Letters</button>
+          <button type="button" data-view="family" aria-pressed="false">Family</button>
+          <button type="button" data-view="team" aria-pressed="false">Team</button>
+          <button type="button" data-view="community" aria-pressed="false">Community</button>
+          <button type="button" data-view="other" aria-pressed="false">Other</button>
         </div>
         <button type="button" class="ghost" id="logout">Sign out</button>
       </div>
@@ -105,8 +108,18 @@ const listEl = document.getElementById('list');
 const countsEl = document.getElementById('counts');
 const loginErr = document.getElementById('login-err');
 const inboxErr = document.getElementById('inbox-err');
-const tabLetters = document.getElementById('tab-letters');
-const tabAll = document.getElementById('tab-all');
+const tabs = [...document.querySelectorAll('[data-view]')];
+
+const buckets = {
+  letters: (row) => row.kind === 'letter',
+  family: (row) => row.experience === 'A slow afternoon, together.',
+  team: (row) => row.experience === 'Step out of the meeting.',
+  community: (row) => row.experience === 'Care for those who care.',
+  other: (row) => row.kind !== 'letter'
+    && row.experience !== 'A slow afternoon, together.'
+    && row.experience !== 'Step out of the meeting.'
+    && row.experience !== 'Care for those who care.',
+};
 
 let payload = null;
 let view = 'letters';
@@ -139,18 +152,12 @@ document.getElementById('logout').addEventListener('click', async () => {
   showLogin();
 });
 
-tabLetters.addEventListener('click', () => {
-  view = 'letters';
-  tabLetters.setAttribute('aria-pressed', 'true');
-  tabAll.setAttribute('aria-pressed', 'false');
-  render();
-});
-
-tabAll.addEventListener('click', () => {
-  view = 'all';
-  tabLetters.setAttribute('aria-pressed', 'false');
-  tabAll.setAttribute('aria-pressed', 'true');
-  render();
+tabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    view = tab.dataset.view;
+    tabs.forEach((item) => item.setAttribute('aria-pressed', String(item === tab)));
+    render();
+  });
 });
 
 function showLogin() {
@@ -185,10 +192,15 @@ async function loadInbox() {
   render();
 }
 
+function rowsFor(name) {
+  return (payload?.messages || []).filter(buckets[name] || (() => false));
+}
+
 function render() {
   if (!payload) return;
-  const rows = view === 'letters' ? payload.letters : payload.messages;
-  countsEl.textContent = `${payload.counts.letters} letter${payload.counts.letters === 1 ? '' : 's'} · ${payload.counts.all} total`;
+  const rows = rowsFor(view);
+  const counts = Object.keys(buckets).map((name) => `${rowsFor(name).length} ${name}`);
+  countsEl.textContent = counts.join(' · ');
   if (!rows.length) {
     listEl.innerHTML = '<p class="empty">Nothing here yet.</p>';
     return;

@@ -80,6 +80,50 @@
     });
   });
 
+  const HOST_SESSIONS = {
+    family: { kicker: 'Family session', title: 'A slow afternoon, together.' },
+    team: { kicker: 'Team session', title: 'Step out of the meeting.' },
+    community: { kicker: 'Community session', title: 'Care for those who care.' },
+  };
+
+  function openHostForm(session) {
+    const host = $('#host');
+    if (!host?.classList.contains('host-pop')) return;
+    const chosen = HOST_SESSIONS[session] || null;
+    const title = $('#host-title');
+    const kicker = $('#host-kicker');
+    const experience = $('#host-experience');
+    if (title) title.textContent = chosen ? chosen.title : 'Tell us who it’s for.';
+    if (kicker) kicker.textContent = chosen ? chosen.kicker : '';
+    if (experience) experience.value = chosen ? chosen.title : '';
+    host.hidden = false;
+    document.body.style.overflow = 'hidden';
+    $('#host-name')?.focus();
+  }
+
+  function closeHostForm() {
+    const host = $('#host');
+    if (!host?.classList.contains('host-pop')) return;
+    host.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', (event) => {
+    const opener = event.target.closest('[data-open-host]');
+    if (opener && $('#host')?.classList.contains('host-pop')) {
+      event.preventDefault();
+      openHostForm(opener.dataset.openHost || '');
+      return;
+    }
+    if (event.target.closest('[data-host-close]')) closeHostForm();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    const host = $('#host');
+    if (!host || host.hidden || !host.classList.contains('host-pop')) return;
+    if (event.key === 'Escape') closeHostForm();
+  });
+
   $$('[data-message]').forEach((form) => {
     form.addEventListener('submit', async (event) => {
       event.preventDefault();

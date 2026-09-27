@@ -321,6 +321,34 @@ sup a { text-decoration: none; color: var(--moss); font-size: 0.75em; }
 .quote { margin: 20px 0; padding-left: 16px; border-left: 2px solid var(--moss); }
 .quote p { font-family: var(--serif); font-size: 24px; line-height: 1.35; }
 .quote footer { color: var(--muted); font-size: 15px; }
+.host-pop { position: fixed; inset: 0; z-index: 90; }
+.host-pop[hidden] { display: none; }
+.host-pop__scrim { position: absolute; inset: 0; background: rgba(15, 14, 13, 0.55); }
+.host-pop__panel {
+  position: relative;
+  width: min(640px, calc(100% - 32px));
+  max-height: calc(100% - 48px);
+  margin: 24px auto;
+  overflow: auto;
+  background: var(--paper);
+  border-radius: 3px 3px 18px 3px;
+  padding: 18px 8px 8px;
+}
+.host-pop__close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: 22px;
+  color: var(--ink);
+}
+.host-pop h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.1; margin-bottom: 8px; }
+.host-pop .kicker:empty { display: none; }
+
 .panel {
   background: var(--cream);
   padding: 22px;
