@@ -117,7 +117,7 @@ const messageFields = {
   letter: ['email'],
   inquire: ['name', 'email', 'note'],
   guide: ['name', 'email', 'practice', 'languages', 'place'],
-  host: ['name', 'email', 'experience', 'who', 'size', 'note'],
+  host: ['name', 'email', 'experience', 'organization', 'who', 'size', 'timing', 'note'],
   booking: ['name', 'email', 'experience', 'date', 'size', 'rate', 'note'],
 };
 

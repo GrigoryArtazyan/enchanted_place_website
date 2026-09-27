@@ -32,7 +32,7 @@
       </figure>
       <div class="copy">
         <p class="eyebrow">Family · 3–5 people · private</p>
-        <h2>A slow afternoon, together.</h2>
+        <h2>Breeding the Family Common Ground.</h2>
         <p class="body">A private session for your household, chosen family, or visiting relatives. Children and grandparents move at the same pace here.</p>
         <ul class="facts">
           <li><strong>3–5</strong><span>people, private</span></li>
@@ -52,15 +52,15 @@
       </figure>
       <div class="copy">
         <p class="eyebrow">Team · 15–20 people</p>
-        <h2>Step out of the meeting.</h2>
-        <p class="body">No trust falls and no slide decks. Your team walks less than 2 km and notices more than they have all quarter.</p>
+        <h2>Building the Team Common Ground.</h2>
+        <p class="body">Create team synergy under the forest canopy, with the presence of trusted teammates.</p>
           <ul class="facts">
           <li><strong>15–20</strong><span>people</span></li>
           <li><strong>$40</strong><span>CAD per person</span></li>
           <li><strong>2 hours</strong><span>duration</span></li>
           </ul>
         <div class="tail">
-          <p class="note">Larger team? <a href="#host" data-open-host>Tell us</a>.</p>
+          <p class="note" aria-hidden="true">&nbsp;</p>
           <button class="btn" type="button" data-open-host="team">Book a team session</button>
         </div>
       </div>
@@ -72,8 +72,8 @@
       </figure>
       <div class="copy">
         <p class="eyebrow">Community · 15–20 people</p>
-        <h2>Care for those who care.</h2>
-        <p class="body">For non-profits, neighbourhood groups, faith communities, and grassroots teams. Kept low on purpose.</p>
+        <h2>Creating Community and Care.</h2>
+        <p class="body">For non-profits, community centers, neighbourhood groups, faith communities, and grassroots orgs creating a better future.</p>
         <ul class="facts">
           <li><strong>15–20</strong><span>people</span></li>
           <li><strong>$20</strong><span>CAD per person</span></li>
@@ -86,7 +86,7 @@
     </div>
     </article>
 </div>
-  <p class="after-cards">A larger group or a custom session? <a href="#host" data-open-host>Tell us who it’s for</a>. A session for one? <a href="about.html#one">Inquire about 1:1</a></p>
+  <p class="after-cards">A session for one? <a href="about.html#one">Inquire about 1:1</a></p>
   <div class="host-pop" id="host" hidden>
     <div class="host-pop__scrim" data-host-close></div>
     <div class="host-pop__panel" role="dialog" aria-modal="true" aria-labelledby="host-title">
@@ -94,19 +94,23 @@
     <form class="panel" data-message="host">
       <p class="kicker" id="host-kicker"></p>
       <h2 id="host-title">Tell us who it’s for.</h2>
-      <p class="hint">Five questions. We’ll come back with a proposal shaped around your people.</p>
+      <p class="hint" id="host-hint">We’ll come back with a proposal shaped around you.</p>
       <input id="host-experience" name="experience" type="hidden" value="">
-      <div class="field">
-        <label for="host-name">Name and organization</label>
-        <input id="host-name" name="name" autocomplete="organization" required>
+      <div class="field" id="host-org-field" hidden>
+        <label for="host-org">Organization name</label>
+        <input id="host-org" name="organization" autocomplete="organization">
+      </div>
+      <div class="field" id="host-name-field">
+        <label for="host-name" id="host-name-label">Name</label>
+        <input id="host-name" name="name" autocomplete="name" required>
       </div>
       <div class="field">
         <label for="host-email">Email</label>
         <input id="host-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
       </div>
-      <div class="field">
+      <div class="field" id="host-who-field" hidden>
         <label for="host-who">Who the session is for</label>
-        <select id="host-who" name="who">
+        <select id="host-who" name="who" disabled>
           <option>Guests</option>
           <option>Staff</option>
           <option>Residents</option>
@@ -115,9 +119,21 @@
           <option>Something else</option>
         </select>
       </div>
+      <div class="field" id="host-size-choice-field" hidden>
+        <label for="host-size-choice">Group size</label>
+        <select id="host-size-choice" name="size" disabled>
+          <option>Under 3 people</option>
+          <option>3–5 people</option>
+          <option>5+ people</option>
+        </select>
+      </div>
+      <div class="field" id="host-size-field">
+        <label for="host-size">Approximate group size</label>
+        <input id="host-size" name="size" placeholder="e.g. 20 people" required>
+      </div>
       <div class="field">
-        <label for="host-size">Approximate group size and timing</label>
-        <input id="host-size" name="size" placeholder="e.g. 20 people, spring" required>
+        <label for="host-timing">Preferred timing</label>
+        <input id="host-timing" name="timing" type="text" placeholder="october 15-20">
       </div>
       <div class="field">
         <label for="host-note">Anything we should know</label>
@@ -125,7 +141,7 @@
       </div>
       <div class="form-foot">
         <button class="btn" type="submit">Send</button>
-        <p>We read every message ourselves and reply within 2 working days.</p>
+        <p>Thank you. We read every message ourselves and reply within a week.</p>
       </div>
     </form>
     </div>
@@ -151,6 +167,7 @@
       <li><a href="about.html#guide">Become a Guide</a></li>
       <li><a href="#host" data-open-host>Host an experience</a></li>
         <li><a href="https://instagram.com/enchanted.place.inc" rel="noopener">Instagram @enchanted.place.inc</a></li>
+        <li><a href="https://www.eventbrite.com/o/enchanted-place-120780031136" rel="noopener">Eventbrite</a></li>
       </ul>
     </div>
   <p class="ack">We practice on the unceded territories of the xʷməθkʷəy̓əm, Sḵwx̱wú7mesh, and səl̓ilwətaʔɬ Nations. <a href="about.html#acknowledgment">Read the full acknowledgment</a></p>

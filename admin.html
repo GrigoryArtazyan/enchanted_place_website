@@ -112,13 +112,13 @@ const tabs = [...document.querySelectorAll('[data-view]')];
 
 const buckets = {
   letters: (row) => row.kind === 'letter',
-  family: (row) => row.experience === 'A slow afternoon, together.',
-  team: (row) => row.experience === 'Step out of the meeting.',
-  community: (row) => row.experience === 'Care for those who care.',
+  family: (row) => row.experience === 'Breeding the Family Common Ground.',
+  team: (row) => row.experience === 'Building the Team Common Ground.',
+  community: (row) => row.experience === 'Creating Community and Care.',
   other: (row) => row.kind !== 'letter'
-    && row.experience !== 'A slow afternoon, together.'
-    && row.experience !== 'Step out of the meeting.'
-    && row.experience !== 'Care for those who care.',
+    && row.experience !== 'Breeding the Family Common Ground.'
+    && row.experience !== 'Building the Team Common Ground.'
+    && row.experience !== 'Creating Community and Care.',
 };
 
 let payload = null;
@@ -224,7 +224,7 @@ function render() {
 
 function summarize(row) {
   if (row.kind === 'letter') return row.email || '';
-  const bits = [row.name, row.email, row.experience, row.date, row.size && `size ${row.size}`, row.rate && `$${row.rate}`, row.note, row.practice, row.languages, row.place, row.who]
+  const bits = [row.name, row.organization, row.email, row.experience, row.date, row.size && `size ${row.size}`, row.timing, row.rate && `$${row.rate}`, row.note, row.practice, row.languages, row.place, row.who]
     .filter(Boolean);
   return bits.join(' · ');
 }

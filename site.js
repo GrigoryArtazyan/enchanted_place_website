@@ -81,9 +81,9 @@
   });
 
   const HOST_SESSIONS = {
-    family: { kicker: 'Family session', title: 'A slow afternoon, together.' },
-    team: { kicker: 'Team session', title: 'Step out of the meeting.' },
-    community: { kicker: 'Community session', title: 'Care for those who care.' },
+    family: { kicker: 'Family session', title: 'Breeding the Family Common Ground.' },
+    team: { kicker: 'Team session', title: 'Building the Team Common Ground.' },
+    community: { kicker: 'Community session', title: 'Creating Community and Care.' },
   };
 
   function openHostForm(session) {
@@ -96,9 +96,43 @@
     if (title) title.textContent = chosen ? chosen.title : 'Tell us who it’s for.';
     if (kicker) kicker.textContent = chosen ? chosen.kicker : '';
     if (experience) experience.value = chosen ? chosen.title : '';
+    const hint = $('#host-hint');
+    if (hint) {
+      hint.textContent = session === 'team'
+        ? 'We’ll come back with a proposal shaped around your team.'
+        : 'We’ll come back with a proposal shaped around you.';
+    }
+    const orgField = $('#host-org-field');
+    const orgInput = $('#host-org');
+    const nameLabel = $('#host-name-label');
+    const askOrg = session !== 'family';
+    if (orgField) orgField.hidden = !askOrg;
+    if (orgInput) {
+      orgInput.required = askOrg;
+      orgInput.disabled = !askOrg;
+      if (!askOrg) orgInput.value = '';
+    }
+    if (nameLabel) nameLabel.textContent = askOrg ? 'Contact name' : 'Name';
+    const whoField = $('#host-who-field');
+    const whoInput = $('#host-who');
+    const askWho = session === 'community';
+    if (whoField) whoField.hidden = !askWho;
+    if (whoInput) whoInput.disabled = !askWho;
+    const sizeChoice = $('#host-size-choice-field');
+    const sizeChoiceInput = $('#host-size-choice');
+    const sizeText = $('#host-size-field');
+    const sizeTextInput = $('#host-size');
+    const askSizeList = session === 'family';
+    if (sizeChoice) sizeChoice.hidden = !askSizeList;
+    if (sizeText) sizeText.hidden = askSizeList;
+    if (sizeChoiceInput) sizeChoiceInput.disabled = !askSizeList;
+    if (sizeTextInput) {
+      sizeTextInput.disabled = askSizeList;
+      sizeTextInput.required = !askSizeList;
+    }
     host.hidden = false;
     document.body.style.overflow = 'hidden';
-    $('#host-name')?.focus();
+    (askOrg ? $('#host-org') : $('#host-name'))?.focus();
   }
 
   function closeHostForm() {
@@ -138,7 +172,7 @@
       try {
         await postMessage(body);
         const thanks = document.createElement('p');
-        thanks.textContent = 'We read every message ourselves and reply within 2 working days.';
+        thanks.textContent = 'Thank you. We read every message ourselves and reply within a week.';
         form.replaceWith(thanks);
       } catch (error) {
         button.disabled = false;
@@ -161,19 +195,19 @@
   // Session catalog shown in the booking sheet (prices CAD per person).
   const EXP = {
     family: {
-      title: 'A slow afternoon, together.',
+      title: 'Breeding the Family Common Ground.',
       short: '3–5 people, private · $65 CAD per person · 2 hours',
       rate: 65,
       sizes: [3, 5],
     },
     team: {
-      title: 'Step out of the meeting. Step into the forest.',
+      title: 'Building the Team Common Ground.',
       short: '15–20 people · $40 CAD per person · 2 hours',
       rate: 40,
       sizes: [15, 20],
     },
     community: {
-      title: 'Care for the people who care for others.',
+      title: 'Creating Community and Care.',
       short: '15–20 people · $20 CAD per person · 2 hours',
       rate: 20,
       sizes: [15, 20],
